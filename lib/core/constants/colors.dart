@@ -13,6 +13,12 @@ class AppColors {
   /// light = #C7D0EB
   static const Color blueLight = Color(0xffC7D0EB);
 
+  /// coklat = #5C472F
+  static const Color brown = Color(0xff5C472F);
+
+  /// yellowshape = ECAF88
+  static const Color yellowshape = Color(0xffECAF88);
+
   /// black = #000000
   static const Color black = Color(0xff000000);
 

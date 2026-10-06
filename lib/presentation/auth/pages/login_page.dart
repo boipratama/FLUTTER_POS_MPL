@@ -8,6 +8,9 @@ import '../../../core/components/buttons.dart';
 import '../../../core/components/custom_text_field.dart';
 import '../../../core/components/spaces.dart';
 
+import 'package:flutter_pos_mpl/core/extensions/build_context_ext.dart';
+import 'package:flutter_pos_mpl/core/constants/colors.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -28,6 +31,13 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (context.isTablet) {
+      return _buildTabletLayout(context);
+    }
+    return _buildMobileLayout(context);
+  }
+
+  Widget _buildMobileLayout(BuildContext context) {
     return Scaffold(
       body: ListView(
         padding: const EdgeInsets.all(16.0),
@@ -72,53 +82,178 @@ class _LoginPageState extends State<LoginPage> {
             obscureText: true,
           ),
           const SpaceHeight(24.0),
-          BlocListener<LoginBloc, LoginState>(
-            listener: (context, state) {
-              state.maybeWhen(
-                orElse: () {},
-                success: (authResponseModel) {
-                  AuthLocalDatasource().saveAuthData(authResponseModel);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DashboardPage(),
+          _buildLoginButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabletLayout(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFA5D6A7),
+      body: Row(
+        children: [
+          // Left Banner Area
+          Expanded(
+            flex: 5,
+            child: Container(
+              color: AppColors.primary,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(24.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
                     ),
-                  );
-                },
-                error: (message) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(message),
-                      backgroundColor: Colors.red,
+                    child: Image.asset(
+                      Assets.images.logo.path,
+                      width: 120,
+                      height: 120,
                     ),
-                  );
-                },
-              );
-            },
-            child: BlocBuilder<LoginBloc, LoginState>(
-              builder: (context, state) {
-                return state.maybeWhen(
-                  orElse: () {
-                    return Button.filled(
-                      onPressed: () {
-                        context.read<LoginBloc>().add(
-                          LoginEvent.login(
-                            email: usernameController.text,
-                            password: passwordController.text,
+                  ),
+                  const SpaceHeight(32.0),
+                  const Text(
+                    "POS Project MPPL",
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SpaceHeight(12.0),
+                  const Text(
+                    "Sistem Kasir Modern & Terintegrasi",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white70,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Right Form Area
+          Expanded(
+            flex: 6,
+            child: Container(
+              color: Colors.grey[50],
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 64.0, vertical: 32.0),
+                  child: Container(
+                    constraints: const BoxConstraints(maxWidth: 480),
+                    padding: const EdgeInsets.all(40.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 30,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Selamat Datang Kasir",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
                           ),
-                        );
-                      },
-                      label: 'Masuk',
-                    );
-                  },
-                  loading: () {
-                    return Center(child: CircularProgressIndicator());
-                  },
-                );
-              },
+                        ),
+                        const SpaceHeight(8.0),
+                        const Text(
+                          "Silakan masuk dengan akun kasir Anda",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SpaceHeight(36.0),
+                        CustomTextField(
+                          controller: usernameController,
+                          label: 'Username',
+                        ),
+                        const SpaceHeight(20.0),
+                        CustomTextField(
+                          controller: passwordController,
+                          label: 'Password',
+                          obscureText: true,
+                        ),
+                        const SpaceHeight(36.0),
+                        _buildLoginButton(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildLoginButton() {
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          orElse: () {},
+          success: (authResponseModel) {
+            AuthLocalDatasource().saveAuthData(authResponseModel);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DashboardPage(),
+              ),
+            );
+          },
+          error: (message) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          },
+        );
+      },
+      child: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
+          return state.maybeWhen(
+            orElse: () {
+              return Button.filled(
+                onPressed: () {
+                  context.read<LoginBloc>().add(
+                    LoginEvent.login(
+                      email: usernameController.text,
+                      password: passwordController.text,
+                    ),
+                  );
+                },
+                label: 'Masuk',
+              );
+            },
+            loading: () {
+              return const Center(child: CircularProgressIndicator());
+            },
+          );
+        },
       ),
     );
   }

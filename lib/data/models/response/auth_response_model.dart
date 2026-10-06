@@ -42,12 +42,12 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> json) => User(
     id: json["id"],
-    name: json["name"],
-    email: json["email"],
-    phone: json["phone"],
-    roles: json["roles"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    name: json["name"] ?? '',
+    email: json["email"] ?? '',
+    phone: json["phone"] ?? '',
+    roles: json["roles"] ?? '',
+    createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"]) : DateTime.now(),
+    updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"]) : DateTime.now(),
   );
 
   Map<String, dynamic> toMap() => {

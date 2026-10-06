@@ -4,6 +4,8 @@ extension BuildContextExt on BuildContext {
   double get deviceHeight => MediaQuery.of(this).size.height;
 
   double get deviceWidth => MediaQuery.of(this).size.width;
+
+  bool get isTablet => MediaQuery.of(this).size.width >= 600;
 }
 
 extension NavigatorExt on BuildContext {

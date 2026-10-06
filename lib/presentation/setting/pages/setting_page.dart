@@ -11,6 +11,7 @@ import 'package:flutter_pos_mpl/data/datasource/auth_local_datasource.dart';
 import 'package:flutter_pos_mpl/data/datasource/product_local_datasource.dart';
 import 'package:flutter_pos_mpl/presentation/auth/pages/login_page.dart';
 import 'package:flutter_pos_mpl/presentation/home/bloc/product/product_bloc.dart';
+import 'package:flutter_pos_mpl/presentation/setting/pages/manage_product_page.dart';
 
 import '../../home/bloc/logout/logout_bloc.dart';
 
@@ -26,16 +27,20 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Setting')),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(
+            maxWidth: context.isTablet ? 700 : double.infinity,
+          ),
+          child: ListView(
+            padding: const EdgeInsets.all(16.0),
         children: [
           Row(
             children: [
               MenuButton(
                 iconPath: Assets.images.manageProduct.path,
                 label: 'Kelola Produk',
-                onPressed: () {},
-                // =>context.push(const ManageProductPage()),
+                onPressed: () => context.push(const ManageProductPage()),
                 isImage: true,
               ),
               const SpaceWidth(15.0),
@@ -111,6 +116,8 @@ class _SettingPageState extends State<SettingPage> {
           const Divider(),
         ],
       ),
-    );
+    ),
+  ),
+);
   }
 }

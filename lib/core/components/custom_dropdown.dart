@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'spaces.dart';
 
-class CustomDropdown extends StatelessWidget {
-  final String? value;
-  final List<String> items;
+class CustomDropdown<T> extends StatelessWidget {
+  final T? value;
+  final List<T> items;
   final String label;
-  final Function(String? value)? onChanged;
+  final Function(T? value)? onChanged;
 
   const CustomDropdown({
     super.key,
@@ -23,21 +23,19 @@ class CustomDropdown extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-          ),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
         ),
         const SpaceHeight(12.0),
-        DropdownButtonFormField<String>(
+        DropdownButtonFormField<T>(
           value: value,
           onChanged: onChanged,
-          items: items.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(item),
-            );
-          }).toList(),
+          items:
+              items.map((T item) {
+                return DropdownMenuItem<T>(
+                  value: item,
+                  child: Text(item.toString()),
+                );
+              }).toList(),
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.0),

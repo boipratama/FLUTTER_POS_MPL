@@ -4,6 +4,7 @@ import 'package:flutter_pos_mpl/data/datasource/auth_remote_datasource.dart';
 import 'package:flutter_pos_mpl/data/datasource/product_remote_datasource.dart';
 import 'package:flutter_pos_mpl/presentation/auth/bloc/login/login_bloc.dart';
 import 'package:flutter_pos_mpl/presentation/auth/pages/login_page.dart';
+import 'package:flutter_pos_mpl/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:flutter_pos_mpl/presentation/home/bloc/logout/logout_bloc.dart';
 import 'package:flutter_pos_mpl/presentation/home/pages/dashboard_page.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,11 +27,16 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => LoginBloc(AuthRemoteDatasource())),
         BlocProvider(create: (context) => LogoutBloc(AuthRemoteDatasource())),
-        BlocProvider( create: (context) => ProductBloc(ProductRemoteDatasource())
-    ..add(const ProductEvent.fetch()),
-),
+        BlocProvider(
+          create:
+              (context) =>
+                  ProductBloc(ProductRemoteDatasource())
+                    ..add(const ProductEvent.fetch()),
+        ),
+        BlocProvider(create: (context) => CheckoutBloc()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter POS MPL',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),

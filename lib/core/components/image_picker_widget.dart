@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -9,7 +11,7 @@ import 'spaces.dart';
 
 class ImagePickerWidget extends StatefulWidget {
   final String label;
-  final void Function(File? file) onChanged;
+  final void Function(XFile? file) onChanged;
   final bool showLabel;
 
   const ImagePickerWidget({
@@ -34,7 +36,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     setState(() {
       if (pickedFile != null) {
         imagePath = pickedFile.path;
-        widget.onChanged(File(imagePath!));
+        widget.onChanged(pickedFile);
       } else {
         debugPrint('No image selected.');
         widget.onChanged(null);
@@ -50,10 +52,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         if (widget.showLabel) ...[
           Text(
             widget.label,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-            ),
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
           ),
           const SpaceHeight(12.0),
         ],
@@ -70,27 +69,25 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 height: 80.0,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
-                  child: imagePath != null
-                      ? Image.file(
-                          File(imagePath!),
-                          fit: BoxFit.cover,
-                        )
-                      : Container(
-                          padding: const EdgeInsets.all(16.0),
-                          color: AppColors.black.withOpacity(0.05),
-                          child: Assets.icons.image.svg(),
-                        ),
+                  child:
+                      imagePath != null
+                          ? Image.file(File(imagePath!), fit: BoxFit.cover)
+                          : Container(
+                            padding: const EdgeInsets.all(16.0),
+                            color: AppColors.black.withOpacity(0.05),
+                            child: Assets.icons.image.svg(),
+                          ),
                 ),
               ),
               const Spacer(),
               Padding(
-                padding: const EdgeInsets.only(right: 10.0),
+                padding: const EdgeInsets.only(right: 4.0),
                 child: Button.filled(
                   height: 30.0,
                   width: 127.0,
                   onPressed: _pickImage,
                   label: 'Choose Photo',
-                  fontSize: 12.0,
+                  fontSize: 10.0,
                   borderRadius: 5.0,
                 ),
               ),
